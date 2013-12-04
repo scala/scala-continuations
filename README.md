@@ -1,8 +1,10 @@
-scala-continuations [<img src="https://api.travis-ci.org/scala/scala-continuations.png"/>](https://travis-ci.org/scala/scala-continuations)
+scala-continuations  (unsupported)  [<img src="https://api.travis-ci.org/scala/scala-continuations.png"/>](https://travis-ci.org/scala/scala-continuations)
 =========
 
-The Scala Delimited Continuations Plugin and Library, which will continue to ship with Scala 2.11.0.
+We welcome contributions, but do not actively maintain this library or the compiler plugin.
+If you're interested in becoming a maintainer, please contact [@adriaanm](https://github.com/adriaanm).
 
-However, we're looking for a new maintainer for the scala-continuations project, as Typesafe does not have the resources to support and maintain it.
+You may also be interested in https://github.com/scala/async, which covers the most common use case for the continuations plugin.
 
-We believe most common use cases for CPS are met by https://github.com/scala/async.
+The Scala Delimited Continuations Plugin and Library will continue to ship with Scala 2.11.0.
+However, it will no longer be included with Scala 2.12.
