@@ -1,6 +1,7 @@
 language: scala
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION clean update compile test
+  # the concurrentRestrictions should prevent spurious test failures, see https://github.com/spray/spray/pull/233
+  - sbt ++$TRAVIS_SCALA_VERSION 'set concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)' clean update compile test
 scala:
   - 2.11.0-SNAPSHOT
 jdk:
@@ -9,6 +10,3 @@ jdk:
 notifications:
   email:
     - adriaan.moors@typesafe.com
-
-# if we get weird timeouts, see https://github.com/spray/spray/pull/233
-# 'set concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)'
