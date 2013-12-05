@@ -3,7 +3,7 @@ import Keys.{`package` => packageTask }
 
 // plugin logic of build based on https://github.com/retronym/boxer
 
-lazy val commonSettings = scalaModuleSettings ++ Seq(
+lazy val commonSettings = Seq(
   repoName                   := "scala-continuations",
   organization               := "org.scala-lang.plugins",
   version                    := "1.0.0-SNAPSHOT",
@@ -16,12 +16,12 @@ lazy val root = project.in( file(".") ).settings( publishArtifact := false ).agg
 lazy val plugin = project settings (
   name                := "scala-continuations-plugin",
   libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value
-) settings (commonSettings : _*)
+) settings(scalacPluginSettings: _*) settings (commonSettings : _*)
 
 val pluginJar = packageTask in (plugin, Compile)
 
 // TODO: the library project's test are really plugin tests, but we first need that jar
-lazy val library = project settings (
+lazy val library = project.settings(scalaModuleSettings: _*).settings(commonSettings: _*).settings(
   name                 := "scala-continuations-library",
   scalacOptions       ++= Seq(
     // add the plugin to the compiler
@@ -38,5 +38,6 @@ lazy val library = project settings (
   testOptions          += Tests.Argument(
     TestFrameworks.JUnit,
     s"-Dscala-continuations-plugin.jar=${pluginJar.value.getAbsolutePath}"
-  )
-) settings (commonSettings : _*)
+  ),
+  OsgiKeys.exportPackage := Seq(s"scala.util.continuations;version=${version.value}")
+)

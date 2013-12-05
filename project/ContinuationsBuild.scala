@@ -14,7 +14,8 @@ object Settings {
 
   val osgiVersion = version(_.replace('-', '.'))
 
-  lazy val scalaModuleSettings = SbtOsgi.osgiSettings ++ Seq(
+
+  lazy val scalacPluginSettings = Seq(
     repoName := name.value,
 
     scalaBinaryVersion := deriveBinaryVersion(scalaVersion.value, snapshotScalaBinaryVersion.value),
@@ -26,6 +27,7 @@ object Settings {
     // TODO: turn on for nightlies, but don't enable for PR validation... "-Xfatal-warnings"
     scalacOptions in compile ++= Seq("-optimize", "-feature", "-deprecation", "-unchecked", "-Xlint"),
 
+
     // Generate $name.properties to store our version as well as the scala version used to build
     resourceGenerators in Compile <+= Def.task {
       val props = new java.util.Properties
@@ -36,11 +38,6 @@ object Settings {
       IO.write(props, null, file)
       Seq(file)
     },
-
-    mappings in (Compile, packageBin) += {
-       (baseDirectory.value / s"${name.value}.properties") -> s"${name.value}.properties"
-    },
-
 
     // maven publishing
     publishTo := {
@@ -87,8 +84,10 @@ object Settings {
           <name>Typesafe, Inc.</name>
         </developer>
       </developers>
-    ),
+    )
+  )
 
+  lazy val scalaModuleSettings = SbtOsgi.osgiSettings ++ scalacPluginSettings ++ Seq(
     OsgiKeys.bundleSymbolicName := s"${organization.value}.${name.value}",
     OsgiKeys.bundleVersion := osgiVersion.value,
     OsgiKeys.exportPackage := Seq(s"*;version=${version.value}"),
