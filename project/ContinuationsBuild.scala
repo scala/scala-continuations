@@ -14,7 +14,7 @@ object Settings {
 
   val osgiVersion = version(_.replace('-', '.'))
 
-  lazy val scalaModuleSettings = SbtOsgi.osgiSettings ++ Seq(
+  lazy val scalaModuleSettings = Seq(
     repoName := name.value,
 
     scalaBinaryVersion := deriveBinaryVersion(scalaVersion.value, snapshotScalaBinaryVersion.value),
@@ -35,10 +35,6 @@ object Settings {
       val file = (resourceManaged in Compile).value / s"${name.value}.properties"
       IO.write(props, null, file)
       Seq(file)
-    },
-
-    mappings in (Compile, packageBin) += {
-       (baseDirectory.value / s"${name.value}.properties") -> s"${name.value}.properties"
     },
 
 
@@ -91,7 +87,6 @@ object Settings {
 
     OsgiKeys.bundleSymbolicName := s"${organization.value}.${name.value}",
     OsgiKeys.bundleVersion := osgiVersion.value,
-    OsgiKeys.exportPackage := Seq(s"*;version=${version.value}"),
     // Sources should also have a nice MANIFEST file
     packageOptions in packageSrc := Seq(
       Package.ManifestAttributes(
