@@ -37,10 +37,6 @@ object Settings {
       Seq(file)
     },
 
-    mappings in (Compile, packageBin) += {
-       (baseDirectory.value / s"${name.value}.properties") -> s"${name.value}.properties"
-    },
-
 
     // maven publishing
     publishTo := {
