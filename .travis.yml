@@ -2,11 +2,12 @@ language: scala
 script:
   # the concurrentRestrictions should prevent spurious test failures, see https://github.com/spray/spray/pull/233
   - sbt ++$TRAVIS_SCALA_VERSION 'set concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)' clean update compile test
+  # TODO: -Dbuild.publish.user=${SONATYPE_USER} -Dbuild.publish.password=${SONATYPE_PASS} $(bash project/release_on_tag.sh)
 scala:
   - 2.11.0-SNAPSHOT
 jdk:
   - openjdk6
-  - openjdk7
+  # - openjdk7
 notifications:
   email:
     - adriaan.moors@typesafe.com
