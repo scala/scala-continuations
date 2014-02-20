@@ -206,7 +206,12 @@ class CompilerErrors extends CompilerTesting {
 }
 
 class CompilerTesting {
-  def loadPlugin = s"-Xplugin:${sys.props("scala-continuations-plugin.jar")} -P:continuations:enable"
+  private def pluginJar: String = {
+    val f = sys.props("scala-continuations-plugin.jar")
+    assert(new java.io.File(f).exists, f)
+    f
+  }
+  def loadPlugin = s"-Xplugin:${pluginJar} -P:continuations:enable"
 
   // note: `code` should have a | margin
   def cpsErrorMessages(msg: String, code: String) =
