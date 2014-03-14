@@ -15,6 +15,7 @@ lazy val root = project.in( file(".") ).settings( publishArtifact := false ).agg
 
 lazy val plugin = project settings (scalaModuleOsgiSettings: _*) settings (
   name                   := "scala-continuations-plugin",
+  crossVersion           := CrossVersion.full, // because compiler api is not binary compatible
   libraryDependencies    += "org.scala-lang" % "scala-compiler" % scalaVersion.value,
   OsgiKeys.exportPackage := Seq(s"scala.tools.selectivecps;version=${version.value}")
 ) settings (commonSettings : _*)
