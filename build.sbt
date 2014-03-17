@@ -1,3 +1,4 @@
+import com.typesafe.tools.mima.plugin.{MimaPlugin, MimaKeys}
 import Keys.{`package` => packageTask }
 import com.typesafe.sbt.osgi.{OsgiKeys, SbtOsgi}
 
@@ -6,9 +7,9 @@ import com.typesafe.sbt.osgi.{OsgiKeys, SbtOsgi}
 lazy val commonSettings = scalaModuleSettings ++ Seq(
   repoName                   := "scala-continuations",
   organization               := "org.scala-lang.plugins",
-  version                    := "1.0.0-SNAPSHOT",
-  scalaVersion               := "2.11.0-M8",
-  snapshotScalaBinaryVersion := "2.11.0-M8"
+  version                    := "1.0.1-SNAPSHOT",
+  scalaVersion               := "2.11.0-RC1",
+  snapshotScalaBinaryVersion := "2.11.0-RC1"
 )
 
 lazy val root = project.in( file(".") ).settings( publishArtifact := false ).aggregate(plugin, library).settings(commonSettings : _*)
@@ -23,8 +24,9 @@ lazy val plugin = project settings (scalaModuleOsgiSettings: _*) settings (
 val pluginJar = packageTask in (plugin, Compile)
 
 // TODO: the library project's test are really plugin tests, but we first need that jar
-lazy val library = project settings (scalaModuleOsgiSettings: _*) settings (
-  name                 := "scala-continuations-library",
+lazy val library = project settings (scalaModuleOsgiSettings: _*) settings (MimaPlugin.mimaDefaultSettings: _*) settings (
+  name                       := "scala-continuations-library",
+  MimaKeys.previousArtifact  := Some(organization.value % s"${name.value}_2.11.0-RC1" % "1.0.0"),
   scalacOptions       ++= Seq(
     // add the plugin to the compiler
     s"-Xplugin:${pluginJar.value.getAbsolutePath}",
@@ -41,5 +43,10 @@ lazy val library = project settings (scalaModuleOsgiSettings: _*) settings (
     TestFrameworks.JUnit,
     s"-Dscala-continuations-plugin.jar=${pluginJar.value.getAbsolutePath}"
   ),
+  // run mima during tests
+  test in Test := {
+    MimaKeys.reportBinaryIssues.value
+    (test in Test).value
+  },
   OsgiKeys.exportPackage := Seq(s"scala.util.continuations;version=${version.value}")
 ) settings (commonSettings : _*)
