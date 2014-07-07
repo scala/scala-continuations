@@ -27,7 +27,6 @@ abstract class SelectiveANFTransform extends PluginComponent with Transform with
 
   class ANFTransformer(unit: CompilationUnit) extends TypingTransformer(unit) {
 
-    implicit val _unit = unit // allow code in CPSUtils.scala to report errors
     var cpsAllowed: Boolean = false // detect cps code in places we do not handle (yet)
 
     object RemoveTailReturnsTransformer extends Transformer {
@@ -63,7 +62,7 @@ abstract class SelectiveANFTransform extends PluginComponent with Transform with
           treeCopy.CaseDef(tree, pat, guard, transform(body))
 
         case Return(_) =>
-          unit.error(tree.pos, "return expressions in CPS code must be in tail position")
+          reporter.error(tree.pos, "return expressions in CPS code must be in tail position")
           tree
 
         case _ =>
@@ -178,7 +177,7 @@ abstract class SelectiveANFTransform extends PluginComponent with Transform with
               treeCopy.ValDef(vd, mods, name, transform(tpt), rhs1)
             }
           } else {
-            unit.error(tree.pos, "cps annotations not allowed on by-value parameters or value definitions")
+            reporter.error(tree.pos, "cps annotations not allowed on by-value parameters or value definitions")
             super.transform(tree)
           }
 
@@ -195,9 +194,9 @@ abstract class SelectiveANFTransform extends PluginComponent with Transform with
           if (hasAnswerTypeAnn(tree.tpe)) {
             if (!cpsAllowed) {
               if (tree.symbol.isLazy)
-                unit.error(tree.pos, "implementation restriction: cps annotations not allowed on lazy value definitions")
+                reporter.error(tree.pos, "implementation restriction: cps annotations not allowed on lazy value definitions")
               else
-                unit.error(tree.pos, "cps code not allowed here / " + tree.getClass + " / " + tree)
+                reporter.error(tree.pos, "cps code not allowed here / " + tree.getClass + " / " + tree)
             }
             log(tree)
           }
@@ -268,10 +267,10 @@ abstract class SelectiveANFTransform extends PluginComponent with Transform with
           // check that then and else parts agree (not necessary any more, but left as sanity check)
           if (cpsR.isDefined) {
             if (elsep == EmptyTree)
-              unit.error(tree.pos, "always need else part in cps code")
+              reporter.error(tree.pos, "always need else part in cps code")
           }
           if (hasAnswerTypeAnn(thenVal.tpe) != hasAnswerTypeAnn(elseVal.tpe)) {
-            unit.error(tree.pos, "then and else parts must both be cps code or neither of them")
+            reporter.error(tree.pos, "then and else parts must both be cps code or neither of them")
           }
 
           (condStats, updateSynthFlag(treeCopy.If(tree, condVal, thenVal, elseVal)), spc)
@@ -341,7 +340,7 @@ abstract class SelectiveANFTransform extends PluginComponent with Transform with
 
         case Return(expr0) =>
           if (isAnyParentImpure)
-            unit.error(tree.pos, "return expression not allowed, since method calls CPS method")
+            reporter.error(tree.pos, "return expression not allowed, since method calls CPS method")
           val (stms, expr, spc) = transInlineValue(expr0, cpsA)
           (stms, updateSynthFlag(treeCopy.Return(tree, expr)), spc)
 
@@ -384,7 +383,7 @@ abstract class SelectiveANFTransform extends PluginComponent with Transform with
 
       val (stms, expr, spc) = transValue(tree, cpsA, cpsR)
 
-      val bot = linearize(spc, getAnswerTypeAnn(expr.tpe))(unit, tree.pos)
+      val bot = linearize(spc, getAnswerTypeAnn(expr.tpe))(tree.pos)
 
       val plainTpe = removeAllCPSAnnotations(expr.tpe)
 
@@ -425,13 +424,13 @@ abstract class SelectiveANFTransform extends PluginComponent with Transform with
             // TODO - obviously this should be done earlier, differently, or with
             // a more skilled hand.  Most likely, all three.
             if ((b.typeSymbol eq NothingClass) && call.tpe.exists(_ eq WildcardType))
-              unit.error(tree.pos, "cannot cps-transform malformed (possibly in shift/reset placement) expression")
+              reporter.error(tree.pos, "cannot cps-transform malformed (possibly in shift/reset placement) expression")
             else
               return ((stms, call))
           }
           catch {
             case ex:TypeError =>
-              unit.error(ex.pos, "cannot cps-transform expression " + tree + ": " + ex.msg)
+              reporter.error(ex.pos, "cannot cps-transform expression " + tree + ": " + ex.msg)
           }
         }
 
@@ -442,7 +441,7 @@ abstract class SelectiveANFTransform extends PluginComponent with Transform with
 
         //println(cpsR + "/" + spc + "/" + bot)
 
-        unit.error(tree.pos, "found cps expression in non-cps position")
+        reporter.error(tree.pos, "found cps expression in non-cps position")
       } else {
         // all is well
 
@@ -474,7 +473,7 @@ abstract class SelectiveANFTransform extends PluginComponent with Transform with
           expr.changeOwner(currentOwner -> sym)
 
           (stms ::: List(ValDef(sym, expr) setType(NoType)),
-             Ident(sym) setType(valueTpe) setPos(tree.pos), linearize(spc, spcVal)(unit, tree.pos))
+             Ident(sym) setType(valueTpe) setPos(tree.pos), linearize(spc, spcVal)(tree.pos))
 
         case _ =>
           (stms, expr, spc)
@@ -503,12 +502,12 @@ abstract class SelectiveANFTransform extends PluginComponent with Transform with
           val spcVal = getAnswerTypeAnn(anfRhs.tpe)
           spcVal foreach (_ => tree.symbol setAnnotations List(AnnotationInfo(MarkerCPSSym.tpe_*, Nil, Nil)))
 
-          (stms:::List(treeCopy.ValDef(tree, mods, name, tpt, anfRhs)), linearize(spc, spcVal)(unit, tree.pos))
+          (stms:::List(treeCopy.ValDef(tree, mods, name, tpt, anfRhs)), linearize(spc, spcVal)(tree.pos))
 
         case _ =>
           val (headStms, headExpr, headSpc) = transInlineValue(stm, cpsA)
           val valSpc = getAnswerTypeAnn(headExpr.tpe)
-          (headStms:::List(headExpr), linearize(headSpc, valSpc)(unit, stm.pos))
+          (headStms:::List(headExpr), linearize(headSpc, valSpc)(stm.pos))
       }
     }
 

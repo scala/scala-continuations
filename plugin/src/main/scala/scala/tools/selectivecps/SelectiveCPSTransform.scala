@@ -293,7 +293,7 @@ abstract class SelectiveCPSTransform extends PluginComponent with
                 // of testing for Context
                 if ((body2.tpe == null) || !(body2.tpe.typeSymbol == Context)) {
                   //println(body2 + "/" + body2.tpe)
-                  unit.error(rhs.pos, "cannot compute type for CPS-transformed function result")
+                  reporter.error(rhs.pos, "cannot compute type for CPS-transformed function result")
                 }
                 body2
               }
@@ -321,7 +321,7 @@ abstract class SelectiveCPSTransform extends PluginComponent with
                     methodName = nme.flatMap
                 }
                 else
-                  unit.error(rhs.pos, "cannot compute type for CPS-transformed function result")
+                  reporter.error(rhs.pos, "cannot compute type for CPS-transformed function result")
 
                 debuglog("will use method:"+methodName)
 
@@ -366,7 +366,7 @@ abstract class SelectiveCPSTransform extends PluginComponent with
                 }
               } catch {
                 case ex:TypeError =>
-                  unit.error(ex.pos, ex.msg)
+                  reporter.error(ex.pos, ex.msg)
                   (bodyStms, bodyExpr)
               }
 

@@ -399,7 +399,7 @@ abstract class CPSAnnotationChecker extends CPSUtils {
       if (!cpsEnabled) {
         val report = try hasCpsParamTypes(tpe) catch { case _: MissingRequirementError => false }
         if (report)
-          global.reporter.error(tree.pos, "this code must be compiled with the Scala continuations plugin enabled")
+          reporter.error(tree.pos, "this code must be compiled with the Scala continuations plugin enabled")
 
         return tpe
       }
@@ -488,7 +488,7 @@ abstract class CPSAnnotationChecker extends CPSUtils {
             if (!(atp0 =:= atp1))
               throw new TypeError("only simple cps types allowed in try/catch blocks (found: " + tpe1 + ")")
             if (!finalizer.isEmpty) // no finalizers allowed. see explanation in SelectiveCPSTransform
-              reporter.error(tree.pos, "try/catch blocks that use continuations cannot have finalizers")
+              typer.context.error(tree.pos, "try/catch blocks that use continuations cannot have finalizers")
           }
           tpe1
 
