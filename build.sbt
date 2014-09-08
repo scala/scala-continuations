@@ -9,7 +9,10 @@ lazy val commonSettings = scalaModuleSettings ++ Seq(
   organization               := "org.scala-lang.plugins",
   version                    := "1.0.1-SNAPSHOT",
   scalaVersion               := "2.11.2",
-  snapshotScalaBinaryVersion := "2.11.2"
+  snapshotScalaBinaryVersion := "2.11.2",
+  scalacOptions ++= Seq(
+    "-deprecation",
+    "-feature")
 )
 
 lazy val root = project.in( file(".") ).settings( publishArtifact := false ).aggregate(plugin, library).settings(commonSettings : _*)
