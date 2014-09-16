@@ -6,7 +6,7 @@ import org.junit.Assert.assertEquals
 import scala.annotation._
 import scala.collection.Seq
 import scala.collection.generic.CanBuildFrom
-import scala.language.{ implicitConversions }
+import scala.language.{ implicitConversions, higherKinds }
 import scala.util.continuations._
 import scala.util.control.Exception
 
@@ -403,9 +403,9 @@ class Suspendable {
   def test4[A](x: List[A]): A @suspendable = x match { case List(x) => x }
 
   @Test def t1821 {
-    assertEquals((), reset(test1()))
+    assertEquals((), reset(test1(())))
     assertEquals((), reset(test2(List(()))))
-    assertEquals((), reset(test3()))
+    assertEquals((), reset(test3(())))
     assertEquals((), reset(test4(List(()))))
   }
 }
@@ -716,12 +716,12 @@ class HigherOrder {
               reset {
                 f(element)
                 if (super.decrementAndGet() == 0) {
-                  continue()
+                  continue(())
                 }
               }
             }
             if (super.decrementAndGet() == 0) {
-              continue()
+              continue(())
             }
           }
         })

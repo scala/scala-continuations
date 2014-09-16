@@ -395,7 +395,7 @@ abstract class SelectiveANFTransform extends PluginComponent with Transform with
           debuglog("cps type conversion (expected: " + cpsR.get + "): " + expr)
 
           if (!hasPlusMarker(expr.tpe))
-            unit.warning(tree.pos, "expression " + tree + " is cps-transformed unexpectedly")
+            reporter.warning(tree.pos, "expression " + tree + " is cps-transformed unexpectedly")
 
           try {
             val Some((a, b)) = cpsR
@@ -446,7 +446,7 @@ abstract class SelectiveANFTransform extends PluginComponent with Transform with
         // all is well
 
         if (hasPlusMarker(expr.tpe)) {
-          unit.warning(tree.pos, "expression " + expr + " of type " + expr.tpe + " is not expected to have a cps type")
+          reporter.warning(tree.pos, "expression " + expr + " of type " + expr.tpe + " is not expected to have a cps type")
           expr modifyType removeAllCPSAnnotations
         }
 
