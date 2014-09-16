@@ -4,7 +4,7 @@ script:
   - sbt ++$TRAVIS_SCALA_VERSION 'set concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)' clean update compile test
   # TODO: -Dbuild.publish.user=${SONATYPE_USER} -Dbuild.publish.password=${SONATYPE_PASS} $(bash project/release_on_tag.sh)
 scala:
-  - 2.11.0-SNAPSHOT
+  - 2.11.0
 jdk:
   - openjdk6
   # - openjdk7
