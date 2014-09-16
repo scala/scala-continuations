@@ -119,12 +119,12 @@ trait CPSUtils {
 
   type CPSInfo = Option[(Type,Type)]
 
-  def linearize(a: CPSInfo, b: CPSInfo)(implicit unit: CompilationUnit, pos: Position): CPSInfo = {
+  def linearize(a: CPSInfo, b: CPSInfo)(implicit pos: Position): CPSInfo = {
     (a,b) match {
       case (Some((u0,v0)), Some((u1,v1))) =>
         vprintln("check lin " + a + " andThen " + b)
         if (!(v1 <:< u0)) {
-          unit.error(pos,"cannot change answer type in composition of cps expressions " +
+          reporter.error(pos,"cannot change answer type in composition of cps expressions " +
           "from " + u1 + " to " + v0 + " because " + v1 + " is not a subtype of " + u0 + ".")
           throw new Exception("check lin " + a + " andThen " + b)
         }

@@ -8,8 +8,8 @@ lazy val commonSettings = scalaModuleSettings ++ Seq(
   repoName                   := "scala-continuations",
   organization               := "org.scala-lang.plugins",
   version                    := "1.0.1-SNAPSHOT",
-  scalaVersion               := "2.11.0-RC1",
-  snapshotScalaBinaryVersion := "2.11.0-RC1"
+  scalaVersion               := "2.11.1",
+  snapshotScalaBinaryVersion := "2.11.1"
 )
 
 lazy val root = project.in( file(".") ).settings( publishArtifact := false ).aggregate(plugin, library).settings(commonSettings : _*)
