@@ -8,8 +8,8 @@ lazy val commonSettings = scalaModuleSettings ++ Seq(
   repoName                   := "scala-continuations",
   organization               := "org.scala-lang.plugins",
   version                    := "1.0.1-SNAPSHOT",
-  scalaVersion               := "2.11.2",
-  snapshotScalaBinaryVersion := "2.11.2",
+  scalaVersion               := "2.11.4",
+  snapshotScalaBinaryVersion := "2.11.4",
   scalacOptions ++= Seq(
     "-deprecation",
     "-feature")
