@@ -16,6 +16,11 @@ scala:
 jdk:
   - openjdk6
   - oraclejdk8
+matrix:
+  exclude:
+    scala:
+      - 2.12.0-M4
+      jdk: openjdk6
 notifications:
   email:
     - adriaan.moors@typesafe.com
