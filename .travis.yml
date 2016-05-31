@@ -15,7 +15,7 @@ scala:
   - 2.12.0-M4
 jdk:
   - openjdk6
-  - openjdk8
+  - oraclejdk8
 notifications:
   email:
     - adriaan.moors@typesafe.com
