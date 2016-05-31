@@ -11,7 +11,7 @@ env:
 script:
   - admin/build.sh
 scala:
-  - 2.11.4
+  - 2.11.8
   - 2.12.0-M4
 jdk:
   - openjdk6
