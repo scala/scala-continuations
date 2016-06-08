@@ -7,9 +7,10 @@ import com.typesafe.sbt.osgi.{OsgiKeys, SbtOsgi}
 lazy val commonSettings = scalaModuleSettings ++ Seq(
   repoName                   := "scala-continuations",
   organization               := "org.scala-lang.plugins",
-  version                    := "1.0.1-SNAPSHOT",
-  scalaVersion               := "2.11.4",
-  snapshotScalaBinaryVersion := "2.11.4",
+  version                    := "1.0.3-SNAPSHOT",
+  scalaVersion               := "2.11.8",
+  crossScalaVersions         := Seq("2.11.8", "2.12.0-M4"),
+  snapshotScalaBinaryVersion := "2.11.8",
   scalacOptions ++= Seq(
     "-deprecation",
     "-feature")
@@ -29,7 +30,7 @@ val pluginJar = packageTask in (plugin, Compile)
 // TODO: the library project's test are really plugin tests, but we first need that jar
 lazy val library = project settings (scalaModuleOsgiSettings: _*) settings (MimaPlugin.mimaDefaultSettings: _*) settings (
   name                       := "scala-continuations-library",
-  MimaKeys.previousArtifact  := Some(organization.value % s"${name.value}_2.11.0-RC1" % "1.0.0"),
+  MimaKeys.mimaPreviousArtifacts  := Set(organization.value % s"${name.value}_2.11.0-RC1" % "1.0.0"),
   scalacOptions       ++= Seq(
     // add the plugin to the compiler
     s"-Xplugin:${pluginJar.value.getAbsolutePath}",
@@ -48,7 +49,7 @@ lazy val library = project settings (scalaModuleOsgiSettings: _*) settings (Mima
   ),
   // run mima during tests
   test in Test := {
-    MimaKeys.reportBinaryIssues.value
+    MimaKeys.mimaReportBinaryIssues.value
     (test in Test).value
   },
   OsgiKeys.exportPackage := Seq(s"scala.util.continuations;version=${version.value}")
