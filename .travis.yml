@@ -25,5 +25,5 @@ matrix:
       jdk: openjdk6
 notifications:
   email:
-    - adriaan.moors@typesafe.com
+    - adriaan.moors@lightbend.com
     - danslapman@gmail.com
