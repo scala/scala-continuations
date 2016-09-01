@@ -8,10 +8,10 @@ env:
 # (See http://docs.travis-ci.com/user/environment-variables/#Secure-Variables.)
     - secure: "apmuVagS7WgWzg9HeDLCcX4INxazi50qukOfPkvluJjm58RCJsDwaZseXrQGqyPzRKuBnAetJ4NDWbZMRkm6QpTiH8grPwDl6iNUSVivvzOZGl3Iy8LvNxUv6CYoQBG+R7d8dW//1xcoHtT2zYo3dYEFpSelfNMMLADNUKXSQmI="
 
-before_install:
-  - sudo hostname "$(hostname | cut -c1-63)"
-  - sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts > /tmp/hosts
-  - sudo mv /tmp/hosts /etc/hosts
+addons:
+  hosts:
+    - myshorthost
+  hostname: myshorthost
 script:
   - admin/build.sh
 scala:
