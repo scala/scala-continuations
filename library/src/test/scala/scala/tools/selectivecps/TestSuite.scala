@@ -792,7 +792,7 @@ class HigherOrder {
   }
   class ExecutionContext
 
-  implicit def defaultExecutionContext = new ExecutionContext
+  implicit def defaultExecutionContext: ExecutionContext = new ExecutionContext
 
   case class Future[+T](x: T) {
     final def map[A](f: T => A): Future[A] = new Future[A](f(x))
