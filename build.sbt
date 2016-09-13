@@ -9,7 +9,7 @@ lazy val commonSettings = scalaModuleSettings ++ Seq(
   organization               := "org.scala-lang.plugins",
   version                    := "1.0.3-SNAPSHOT",
   scalaVersion               := "2.11.8",
-  crossScalaVersions         := Seq("2.11.8", "2.12.0-M5"),
+  crossScalaVersions         := Seq("2.11.8", "2.12.0-RC1"),
   snapshotScalaBinaryVersion := "2.11.8",
   scalacOptions ++= Seq(
     "-deprecation",
