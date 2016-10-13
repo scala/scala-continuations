@@ -7,8 +7,8 @@ import scala.tools.nsc.symtab._
 import scala.tools.nsc.plugins._
 
 /**
- * In methods marked @cps, explicitly name results of calls to other @cps methods
- */
+  * In methods marked @cps, explicitly name results of calls to other @cps methods
+  */
 abstract class SelectiveANFTransform extends PluginComponent with Transform with
   TypingTransformers with CPSUtils {
   // inherits abstract value `global` and class `Phase` from Transform
@@ -51,9 +51,9 @@ abstract class SelectiveANFTransform extends PluginComponent with Transform with
 
         case Try(block, catches, finalizer) =>
           treeCopy.Try(tree,
-                       transform(block),
-                       (catches map (t => transform(t))).asInstanceOf[List[CaseDef]],
-                       transform(finalizer))
+            transform(block),
+            (catches map (t => transform(t))).asInstanceOf[List[CaseDef]],
+            transform(finalizer))
 
         case CaseDef(pat, guard, r @ Return(expr)) =>
           treeCopy.CaseDef(tree, pat, guard, expr)
@@ -105,7 +105,7 @@ abstract class SelectiveANFTransform extends PluginComponent with Transform with
             debuglog("result is of type "+rhs1.tpe)
 
             treeCopy.DefDef(dd, mods, name, transformTypeDefs(tparams), transformValDefss(vparamss),
-                        transform(tpt), rhs1)
+              transform(tpt), rhs1)
           }
 
         case ff @ Function(vparams, body) =>
@@ -192,12 +192,12 @@ abstract class SelectiveANFTransform extends PluginComponent with Transform with
 
         case _ =>
           if (hasAnswerTypeAnn(tree.tpe)) {
-            if (!cpsAllowed) {
-              if (tree.symbol.isLazy)
-                reporter.error(tree.pos, "implementation restriction: cps annotations not allowed on lazy value definitions")
-              else
-                reporter.error(tree.pos, "cps code not allowed here / " + tree.getClass + " / " + tree)
-            }
+            if (tree.symbol.isLazy) {
+              reporter.error(tree.pos, "implementation restriction: cps annotations not allowed on lazy value definitions")
+              cpsAllowed = false
+            } else if (!cpsAllowed)
+              reporter.error(tree.pos, "cps code not allowed here / " + tree.getClass + " / " + tree)
+
             log(tree)
           }
 
@@ -261,7 +261,7 @@ abstract class SelectiveANFTransform extends PluginComponent with Transform with
           val (cpsA2, cpsR2) = if (hasSynthMarker(tree.tpe))
             (spc, linearize(spc, getAnswerTypeAnn(tree.tpe))) else
             (None, getAnswerTypeAnn(tree.tpe)) // if no cps in condition, branches must conform to tree.tpe directly
-          val thenVal = transExpr(thenp, cpsA2, cpsR2)(cpsR2.isDefined || isAnyParentImpure)
+        val thenVal = transExpr(thenp, cpsA2, cpsR2)(cpsR2.isDefined || isAnyParentImpure)
           val elseVal = transExpr(elsep, cpsA2, cpsR2)(cpsR2.isDefined || isAnyParentImpure)
 
           // check that then and else parts agree (not necessary any more, but left as sanity check)
@@ -354,7 +354,7 @@ abstract class SelectiveANFTransform extends PluginComponent with Transform with
           val (stms, expr, spc) = transInlineValue(expr0, cpsA)
           val tpt1 = if (treeInfo.isWildcardStarArg(tree)) tpt else
             treeCopy.TypeTree(tpt).setType(removeAllCPSAnnotations(tpt.tpe))
-//        (stms, updateSynthFlag(treeCopy.Typed(tree, expr, tpt1)), spc)
+          //        (stms, updateSynthFlag(treeCopy.Typed(tree, expr, tpt1)), spc)
           (stms, treeCopy.Typed(tree, expr, tpt1).setType(removeAllCPSAnnotations(tree.tpe)), spc)
 
         case TypeApply(fun, args) =>
@@ -469,11 +469,11 @@ abstract class SelectiveANFTransform extends PluginComponent with Transform with
             currentOwner.newValue(newTermName(unit.fresh.newName("tmp")), tree.pos, Flags.SYNTHETIC)
               setInfo valueTpe
               setAnnotations List(AnnotationInfo(MarkerCPSSym.tpe_*, Nil, Nil))
-          )
+            )
           expr.changeOwner(currentOwner -> sym)
 
           (stms ::: List(ValDef(sym, expr) setType(NoType)),
-             Ident(sym) setType(valueTpe) setPos(tree.pos), linearize(spc, spcVal)(tree.pos))
+            Ident(sym) setType(valueTpe) setPos(tree.pos), linearize(spc, spcVal)(tree.pos))
 
         case _ =>
           (stms, expr, spc)
@@ -522,7 +522,7 @@ abstract class SelectiveANFTransform extends PluginComponent with Transform with
           case stat :: rest =>
             val (stats, nextAns) = transInlineStm(stat, currAns)
             rec(rest, nextAns, accum ++ stats)
-         }
+        }
 
       val (anfStats, anfExpr) = rec(stms, cpsA, List())
       // println("\nanf-block:\n"+ ((stms :+ expr) mkString ("{", "\n", "}")) +"\nBECAME\n"+ ((anfStats :+ anfExpr) mkString ("{", "\n", "}")))

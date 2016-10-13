@@ -30,7 +30,10 @@ val pluginJar = packageTask in (plugin, Compile)
 // TODO: the library project's test are really plugin tests, but we first need that jar
 lazy val library = project settings (scalaModuleOsgiSettings: _*) settings (MimaPlugin.mimaDefaultSettings: _*) settings (
   name                       := "scala-continuations-library",
-  MimaKeys.mimaPreviousArtifacts  := Set(organization.value % s"${name.value}_2.11.0-RC1" % "1.0.0"),
+  MimaKeys.mimaPreviousArtifacts  := Set(
+    organization.value % s"${name.value}_2.11.0-RC1" % "1.0.0",
+    organization.value % s"${name.value}_2.11" % "1.0.2"
+  ),
   scalacOptions       ++= Seq(
     // add the plugin to the compiler
     s"-Xplugin:${pluginJar.value.getAbsolutePath}",
