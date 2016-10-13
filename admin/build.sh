@@ -9,7 +9,7 @@ if [[ "$TRAVIS_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9-]+)? ]]; then
   echo "Going to release from tag $TRAVIS_TAG!"
   myVer=$(echo $TRAVIS_TAG | sed -e s/^v//)
   publishVersion='set every version := "'$myVer'"'
-  extraTarget="publish-signed"
+  extraTarget="+publish-signed"
 
   cat admin/gpg.sbt >> project/plugins.sbt
   admin/decrypt.sh sensitive.sbt
@@ -17,4 +17,4 @@ if [[ "$TRAVIS_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9-]+)? ]]; then
 fi
 
 # the concurrentRestrictions should prevent spurious test failures, see https://github.com/spray/spray/pull/233
-sbt ++$TRAVIS_SCALA_VERSION 'set concurrentRestrictions in Global += Tags.limit(Tags.Test, 1)' "$publishVersion" clean update compile test $extraTarget
+sbt "$publishVersion" clean update +compile +test +publishLocal $extraTarget
