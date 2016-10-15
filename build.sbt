@@ -14,7 +14,7 @@ lazy val commonSettings = scalaModuleSettings ++ Seq(
     if (java.startsWith("1.6.") || java.startsWith("1.7."))
       Seq("2.11.8")
     else if (java.startsWith("1.8.") || java.startsWith("1.9."))
-      Seq("2.12.0-RC1")
+      Seq("2.12.0-RC2")
     else
       sys.error(s"don't know what Scala versions to build on $java")
   },
@@ -22,7 +22,19 @@ lazy val commonSettings = scalaModuleSettings ++ Seq(
   scalacOptions ++= Seq(
     "-deprecation",
     "-feature")
-)
+) ++ crossVersionSharedSources
+
+lazy val crossVersionSharedSources: Seq[Setting[_]] =
+  Seq(Compile, Test).map { sc =>
+    (unmanagedSourceDirectories in sc) ++= {
+      (unmanagedSourceDirectories in sc ).value.map { dir: File =>
+        CrossVersion.partialVersion(scalaVersion.value) match {
+          case Some((2, y)) if y == 11 => new File(dir.getPath + "-2.11")
+          case Some((2, y)) if y == 12 => new File(dir.getPath + "-2.12")
+        }
+      }
+    }
+  }
 
 lazy val root = project.in( file(".") ).settings( publishArtifact := false ).aggregate(plugin, library).settings(commonSettings : _*)
 
@@ -39,7 +51,6 @@ val pluginJar = packageTask in (plugin, Compile)
 lazy val library = project settings (scalaModuleOsgiSettings: _*) settings (MimaPlugin.mimaDefaultSettings: _*) settings (
   name                       := "scala-continuations-library",
   MimaKeys.mimaPreviousArtifacts  := Set(
-    organization.value % s"${name.value}_2.11.0-RC1" % "1.0.0",
     organization.value % s"${name.value}_2.11" % "1.0.2"
   ),
   scalacOptions       ++= Seq(
