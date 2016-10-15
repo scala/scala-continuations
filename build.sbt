@@ -22,7 +22,19 @@ lazy val commonSettings = scalaModuleSettings ++ Seq(
   scalacOptions ++= Seq(
     "-deprecation",
     "-feature")
-)
+) ++ crossVersionSharedSources
+
+lazy val crossVersionSharedSources: Seq[Setting[_]] =
+  Seq(Compile, Test).map { sc =>
+    (unmanagedSourceDirectories in sc) ++= {
+      (unmanagedSourceDirectories in sc ).value.map { dir: File =>
+        CrossVersion.partialVersion(scalaVersion.value) match {
+          case Some((2, y)) if y == 11 => new File(dir.getPath + "-2.11")
+          case Some((2, y)) if y == 12 => new File(dir.getPath + "-2.12")
+        }
+      }
+    }
+  }
 
 lazy val root = project.in( file(".") ).settings( publishArtifact := false ).aggregate(plugin, library).settings(commonSettings : _*)
 
