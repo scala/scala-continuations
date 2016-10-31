@@ -5,7 +5,7 @@
 # echo the sbt commands that publish a release with the version derived from the tag
 publishJdk=oraclejdk8
 publishBranch=master
-publishScalaVersion=2.12.0-RC1
+publishScalaVersion=2.12.0
 
 unset tag version
 
