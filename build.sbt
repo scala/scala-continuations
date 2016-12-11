@@ -30,7 +30,7 @@ lazy val crossVersionSharedSources: Seq[Setting[_]] =
       (unmanagedSourceDirectories in sc ).value.map { dir: File =>
         CrossVersion.partialVersion(scalaVersion.value) match {
           case Some((2, y)) if y == 11 => new File(dir.getPath + "-2.11")
-          case Some((2, y)) if y == 12 => new File(dir.getPath + "-2.12")
+          case Some((2, y)) if y >= 12 => new File(dir.getPath + "-2.12")
         }
       }
     }
