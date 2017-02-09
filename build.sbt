@@ -14,7 +14,7 @@ lazy val commonSettings = scalaModuleSettings ++ Seq(
     if (java.startsWith("1.6.") || java.startsWith("1.7."))
       Seq("2.11.8")
     else if (java.startsWith("1.8.") || java.startsWith("1.9."))
-      Seq("2.12.0")
+      Seq("2.12.1")
     else
       sys.error(s"don't know what Scala versions to build on $java")
   },
@@ -63,8 +63,8 @@ lazy val library = project settings (scalaModuleOsgiSettings: _*) settings (Mima
     s"-Jdummy=${pluginJar.value.lastModified}"),
   libraryDependencies ++= Seq(
     "org.scala-lang" % "scala-compiler"  % scalaVersion.value % "test",
-    "junit"          % "junit"           % "4.11" % "test",
-    "com.novocode"   % "junit-interface" % "0.10" % "test"),
+    "junit"          % "junit"           % "4.12" % "test",
+    "com.novocode"   % "junit-interface" % "0.11" % "test"),
   testOptions          += Tests.Argument(
     TestFrameworks.JUnit,
     s"-Dscala-continuations-plugin.jar=${pluginJar.value.getAbsolutePath}"
