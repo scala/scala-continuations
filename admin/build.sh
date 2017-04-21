@@ -18,13 +18,20 @@ set -e
 verPat="[0-9]+\.[0-9]+\.[0-9]+(-[A-Za-z0-9-]+)?"
 tagPat="^v$verPat(#$verPat)?$"
 
-if [[ "$TRAVIS_TAG" =~ $tagPat ]]; then
+scalaVer=$(echo $TRAVIS_TAG | sed s/[^#]*// | sed s/^#//)
+if [[ $scalaVer == "2.11"* ]]; then
+  publishJdk="openjdk6"
+else
+  publishJdk="oraclejdk8"
+fi
+
+if [ "$TRAVIS_JDK_VERSION" == "$publishJdk" ] && [[ "$TRAVIS_TAG" =~ $tagPat ]]; then
+
   echo "Going to release from tag $TRAVIS_TAG!"
 
   tagVer=$(echo $TRAVIS_TAG | sed s/#.*// | sed s/^v//)
   publishVersion='set every version := "'$tagVer'"'
 
-  scalaVer=$(echo $TRAVIS_TAG | sed s/[^#]*// | sed s/^#//)
   if [ "$scalaVer" != "" ]; then
     publishScalaVersion='set every crossScalaVersions := Seq("'$scalaVer'")'
   fi
