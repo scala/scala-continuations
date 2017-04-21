@@ -8,8 +8,8 @@ lazy val commonSettings = scalaModuleSettings ++ Seq(
   version      := "1.0.3-SNAPSHOT",
 
   scalaVersionsByJvm := {
-    val j67 = List("2.11.11", "2.11.8")
-    val j89 = List("2.12.2", "2.12.1", "2.12.0", "2.13.0-M1")
+    val j67 = List("2.11.8", "2.11.11")
+    val j89 = List("2.12.0", "2.12.1", "2.12.2", "2.13.0-M1")
     // Map[JvmVersion, List[(ScalaVersion, UseForPublishing)]]
     Map(
       6 -> j67.map(_ -> true),
