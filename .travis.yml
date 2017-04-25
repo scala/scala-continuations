@@ -2,10 +2,12 @@ language: scala
 
 env:
   global:
-      # Don't commit sensitive files, instead commit a version encrypted with $SECRET,
-      # this environment variable is encrypted with this repo's private key and stored below:
-      # (See http://docs.travis-ci.com/user/environment-variables/#Secure-Variables.)
-    - secure: "apmuVagS7WgWzg9HeDLCcX4INxazi50qukOfPkvluJjm58RCJsDwaZseXrQGqyPzRKuBnAetJ4NDWbZMRkm6QpTiH8grPwDl6iNUSVivvzOZGl3Iy8LvNxUv6CYoQBG+R7d8dW//1xcoHtT2zYo3dYEFpSelfNMMLADNUKXSQmI="
+    # PGP_PASSPHRASE
+    - secure: "ImY9KGs8EmTk1mPgZJEWqfy0GR7Wp2lZ07z1eSVwMQTGvYZIPZchNa30jzjB4YVHrG5PvwOSXaGx3ivFRZk/FElWbJ1skFXfHz+JwvNRvN6fhNIhoD0mkPWDTDtA3NnlLen4hbC9rZCPuP4RqrS1jy2nZuD36ZLx2NU9tQM6tUc="
+    # SONA_USER
+    - secure: "f0Acd/hWkgHoT5uyFL+K3D8DB2bRSoXRJhnTueMzJvTHBJZd2kpPo9t7YsmH7fowopVMCcBPzfRyiPoJVf4CJKc/SHCKn/YMJInCC1YPOrchLX/ShTPTeaP4lxFnm/bmmdPOmqfLSQsPIuEP6LBffsq1lvLO6VL61QrDy+D4EQs="
+    # SONA_PASS
+    - secure: "E6OE1MoZ4VQHRNtEyyKfmnj8Bj7uGpgHLmlvJR/iy7qdxBbNA8cEz/Qs64uTft5zfZ9bJsQhiuxLcTtFKYKFP4qvExz8FyilhmUwKjD5Eux4FAeBjDBeXBETM1JYFB+JYP9l8dcQecMeGpd46I52pLjYYmNyQQ1YpOvK29GIQLA="
 
 before_install:
   - sudo hostname "$(hostname | cut -c1-63)"
