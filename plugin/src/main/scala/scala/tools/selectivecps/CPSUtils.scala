@@ -13,8 +13,8 @@ trait CPSUtils {
   def vprintln(x: =>Any): Unit = if (verbose) println(x)
 
   object cpsNames {
-    val catches         = newTermName("$catches")
-    val ex              = newTermName("$ex")
+    val catches         = newTermName(s"$$catches")
+    val ex              = newTermName(s"$$ex")
     val flatMapCatch    = newTermName("flatMapCatch")
     val getTrivialValue = newTermName("getTrivialValue")
     val isTrivial       = newTermName("isTrivial")
@@ -22,7 +22,7 @@ trait CPSUtils {
     val reifyR          = newTermName("reifyR")
     val shift           = newTermName("shift")
     val shiftR          = newTermName("shiftR")
-    val shiftSuffix     = newTermName("$shift")
+    val shiftSuffix     = newTermName(s"$$shift")
     val shiftUnit0      = newTermName("shiftUnit0")
     val shiftUnit       = newTermName("shiftUnit")
     val shiftUnitR      = newTermName("shiftUnitR")
