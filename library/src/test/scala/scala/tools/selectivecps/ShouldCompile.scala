@@ -14,7 +14,7 @@ object t3620 extends App {
     private val map = new HashMap[K, V]
     private var waiting: List[Waiting] = Nil
 
-    def waitFor(k: K, f: (V => Unit)) {
+    def waitFor(k: K, f: (V => Unit)): Unit = {
       map.get(k) match {
         case Some(v) => f(v)
         case None => {
@@ -28,7 +28,7 @@ object t3620 extends App {
     }
 
 
-    def add(key: K, value: V) {
+    def add(key: K, value: V): Unit = {
       map(key) = value
       val p = waiting.partition(_.key == key)
       waiting = p._2
