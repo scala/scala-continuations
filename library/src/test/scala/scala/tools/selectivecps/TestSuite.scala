@@ -402,7 +402,7 @@ class Suspendable {
   def test3[A](x: A): A @suspendable = x match { case x => x }
   def test4[A](x: List[A]): A @suspendable = x match { case List(x) => x }
 
-  @Test def t1821 {
+  @Test def t1821: Unit = {
     assertEquals((), reset(test1(())))
     assertEquals((), reset(test2(List(()))))
     assertEquals((), reset(test3(())))
@@ -414,7 +414,7 @@ class Misc {
 
   def double[B](n: Int)(k: Int => B): B = k(n * 2)
 
-  @Test def t2864 {
+  @Test def t2864: Unit = {
     reset {
       val result1 = shift(double[Unit](100))
       val result2 = shift(double[Unit](result1))
@@ -677,14 +677,14 @@ class HigherOrder {
           private val results = new AtomicReference[List[A]](Nil)
 
           @tailrec
-          private def add(element: A) {
+          private def add(element: A): Unit = {
             val old = results.get
             if (!results.compareAndSet(old, element :: old)) {
               add(element)
             }
           }
 
-          override final def apply(continue: ContinuationizedParallelIterable[A] => Unit) {
+          override final def apply(continue: ContinuationizedParallelIterable[A] => Unit): Unit = {
             for (element <- underline) {
               super.incrementAndGet()
               reset {
@@ -706,7 +706,7 @@ class HigherOrder {
     final def foreach[U](f: A => U @suspendable): Unit @suspendable =
       shift(
         new AtomicInteger(1) with ((Unit => Unit) => Unit) {
-          override final def apply(continue: Unit => Unit) {
+          override final def apply(continue: Unit => Unit): Unit = {
             for (element <- underline) {
               super.incrementAndGet()
               reset {
@@ -725,7 +725,7 @@ class HigherOrder {
     final def map[B: Manifest](f: A => B @suspendable): ContinuationizedParallelIterable[B] @suspendable =
       shift(
         new AtomicInteger(underline.size) with ((ContinuationizedParallelIterable[B] => Unit) => Unit) {
-          override final def apply(continue: ContinuationizedParallelIterable[B] => Unit) {
+          override final def apply(continue: ContinuationizedParallelIterable[B] => Unit): Unit = {
             val results = new Array[B](super.get)
             for ((element, i) <- underline.view.zipWithIndex) {
               reset {
