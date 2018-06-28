@@ -11,7 +11,9 @@ scalaVersionsByJvm in ThisBuild := {
     6 -> j67.map(_ -> true),
     7 -> j67.map(_ -> false),
     8 -> j89.map(_ -> true),
-    9 -> j89.map(_ -> false)
+    9 -> j89.map(_ -> false),
+    10 -> j89.map(_ -> false),
+    11 -> j89.map(_ -> false)
   )
 }
 
