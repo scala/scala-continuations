@@ -1,5 +1,13 @@
 language: scala
 
+# Needed for openjdk6
+dist: precise
+sudo: required
+addons:
+  hosts:
+    - localhost
+  hostname: localhost.local
+
 env:
   global:
     # PGP_PASSPHRASE
@@ -9,11 +17,10 @@ env:
     # SONA_PASS
     - secure: "E6OE1MoZ4VQHRNtEyyKfmnj8Bj7uGpgHLmlvJR/iy7qdxBbNA8cEz/Qs64uTft5zfZ9bJsQhiuxLcTtFKYKFP4qvExz8FyilhmUwKjD5Eux4FAeBjDBeXBETM1JYFB+JYP9l8dcQecMeGpd46I52pLjYYmNyQQ1YpOvK29GIQLA="
 
-before_install:
-  - sudo hostname "$(hostname | cut -c1-63)"
-  - sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts > /tmp/hosts
-  - sudo mv /tmp/hosts /etc/hosts
 script:
+  # work around https://github.com/travis-ci/travis-ci/issues/9713
+  - if [[ $JAVA_HOME = *java-6* ]]; then jdk_switcher use openjdk6; fi
+  - java -version
   - admin/build.sh
 
 addons:
@@ -24,7 +31,9 @@ addons:
 jdk:
   - openjdk6
   - oraclejdk8
+  - openjdk11
 notifications:
   email:
     - adriaan.moors@lightbend.com
     - danslapman@gmail.com
+    - seth.tisue@lightbend.com

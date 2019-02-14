@@ -4,8 +4,8 @@ import ScalaModulePlugin._
 // plugin logic of build based on https://github.com/retronym/boxer
 
 scalaVersionsByJvm in ThisBuild := {
-  val j67 = List("2.11.8", "2.11.11")
-  val j89 = List("2.12.0", "2.12.1", "2.12.2", "2.13.0-M1")
+  val j67 = List("2.11.12")
+  val j89 = List("2.12.6", "2.12.8", "2.13.0-M1")
   // Map[JvmVersion, List[(ScalaVersion, UseForPublishing)]]
   Map(
     6 -> j67.map(_ -> true),
@@ -13,7 +13,8 @@ scalaVersionsByJvm in ThisBuild := {
     8 -> j89.map(_ -> true),
     9 -> j89.map(_ -> false),
     10 -> j89.map(_ -> false),
-    11 -> j89.map(_ -> false)
+    11 -> j89.map(_ -> false),
+    12 -> j89.map(_ -> false)
   )
 }
 
