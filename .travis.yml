@@ -24,7 +24,9 @@ addons:
 jdk:
   - openjdk6
   - oraclejdk8
+  - openjdk11
 notifications:
   email:
     - adriaan.moors@lightbend.com
     - danslapman@gmail.com
+    - seth.tisue@lightbend.com
