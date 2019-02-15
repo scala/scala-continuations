@@ -1,5 +1,4 @@
-scala-continuations  [<img src="https://api.travis-ci.org/scala/scala-continuations.png"/>](https://travis-ci.org/scala/scala-continuations)
-=========
+# scala-continuations [![Build Status](https://travis-ci.org/scala/scala-continuations.svg?branch=master)](https://travis-ci.org/scala/scala-continuations)
 
 scala-continuations is a library and a compiler plugin for Scala language that provides support for CPS transformations.
 
