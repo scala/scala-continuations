@@ -2,7 +2,7 @@
 
 scala-continuations is a library and a compiler plugin for Scala language that provides support for CPS transformations.
 
-You may also be interested in https://github.com/scala/scala-async, which covers the most common use case for the continuations plugin.
+You may also be interested in https://github.com/scala/scala-async, which covers what was once the most common use case for the continuations plugin.
 
 ## Maintenance
 
