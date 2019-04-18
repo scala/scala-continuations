@@ -19,5 +19,4 @@ jdk:
 notifications:
   email:
     - adriaan.moors@lightbend.com
-    - danslapman@gmail.com
     - seth.tisue@lightbend.com
