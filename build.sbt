@@ -18,8 +18,6 @@ lazy val commonSettings = scalaModuleSettings ++ Seq(
   organization := "org.scala-lang.plugins",
   version      := "1.0.3-SNAPSHOT",
 
-  licenses := Seq(("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0"))),
-
   scalacOptions ++= Seq(
     "-deprecation",
     "-feature")
