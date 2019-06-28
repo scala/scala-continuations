@@ -16,4 +16,4 @@ There is not currently a lead maintainer. If you would like to volunteer, please
 
 The current development branch supports Scala 2.11 and 2.12 on JDK 8+.  (Older artifacts, supporting older Scala versions, remain available on Maven Central.)
 
-Volunteers are needed to [add support for Scala 2.13](https://github.com/scala/scala-continuations/issues/37).
+The [support for Scala 2.13](https://github.com/scala/scala-continuations/issues/37) is work in progress.
