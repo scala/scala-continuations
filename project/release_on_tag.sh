@@ -3,7 +3,7 @@
 # if the current commit has a tag named like v(\d+\.\d+\.\d+.*),
 # and we're running on the right jdk/branch,
 # echo the sbt commands that publish a release with the version derived from the tag
-publishJdk=oraclejdk8
+publishJdk=openjdk8
 publishBranch=master
 publishScalaVersion=2.12.0
 
