@@ -73,8 +73,8 @@ if [[ "$TRAVIS_TAG" =~ $tagPat ]]; then
 fi
 
 # default is +publishSigned; we cross-build with travis jobs, not sbt's crossScalaVersions
-export CI_RELEASE="$projectPrefix/publishSigned"
-export CI_SNAPSHOT_RELEASE="$projectPrefix/publish"
+export CI_RELEASE="${projectPrefix}publishSigned"
+export CI_SNAPSHOT_RELEASE="${projectPrefix}publish"
 
 # default is sonatypeBundleRelease, which closes and releases the staging repo
 # see https://github.com/xerial/sbt-sonatype#commands
