@@ -1,27 +1,12 @@
 import Keys.{ `package` => packageTask }
-import ScalaModulePlugin._
 
-// plugin logic of build based on https://github.com/retronym/boxer
-
-scalaVersionsByJvm in ThisBuild := {
-  val vs = List("2.11.12", "2.12.8")
-  // Map[JvmVersion, List[(ScalaVersion, UseForPublishing)]]
-  Map(
-    8 -> vs.map(_ -> true),
-    11 -> vs.map(_ -> false),
-    12 -> vs.map(_ -> false)
-  )
-}
-
-lazy val commonSettings = scalaModuleSettings ++ Seq(
-  repoName     := "scala-continuations",
-  organization := "org.scala-lang.plugins",
-  version      := "1.0.3-SNAPSHOT",
-
-  scalacOptions ++= Seq(
-    "-deprecation",
-    "-feature")
-) ++ crossVersionSharedSources
+lazy val commonSettings = ScalaModulePlugin.scalaModuleSettings ++
+  ScalaModulePlugin.scalaModuleSettingsJVM ++
+  Seq(
+    scalaModuleRepoName := "scala-continuations",
+    organization := "org.scala-lang.plugins",
+    scalacOptions ++= Seq("-deprecation", "-feature")
+  ) ++ crossVersionSharedSources
 
 lazy val crossVersionSharedSources: Seq[Setting[_]] =
   Seq(Compile, Test).map { sc =>
@@ -35,9 +20,9 @@ lazy val crossVersionSharedSources: Seq[Setting[_]] =
     }
   }
 
-lazy val root = project.in(file("."))
+lazy val continuations = project.in(file("."))
   .settings(commonSettings: _*)
-  .settings(publishArtifact := false)
+  .settings(skip in publish := true)
   .aggregate(plugin, library)
 
 lazy val plugin = project
@@ -56,7 +41,7 @@ lazy val library = project
   .settings(commonSettings: _*)
   .settings(
     name                := "scala-continuations-library",
-    mimaPreviousVersion := Some("1.0.3"),
+    scalaModuleMimaPreviousVersion := Some("1.0.3"),
 
     scalacOptions ++= Seq(
       // add the plugin to the compiler
