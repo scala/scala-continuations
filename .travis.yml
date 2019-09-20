@@ -10,7 +10,7 @@ env:
   global:
     # The plugin needs to be released for every minor version, but the library is only released
     # once per major version (2.11, 2.12). The library is only published on:
-    - LIBRARY_PUBLISH_SCALA_VERSIONS=(2.11.12 2.12.10)
+    - LIBRARY_PUBLISH_SCALA_VERSIONS="2.11.12 2.12.10"
   matrix:
     - ADOPTOPENJDK=8
     - ADOPTOPENJDK=11

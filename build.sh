@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 # Builds of tagged revisions are published to sonatype staging.
 
