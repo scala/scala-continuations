@@ -54,7 +54,7 @@ lazy val library = project
 
     libraryDependencies ++= Seq(
       "org.scala-lang" % "scala-compiler"  % scalaVersion.value % "test",
-      "junit"          % "junit"           % "4.12" % "test",
+      "junit"          % "junit"           % "4.13" % "test",
       "com.novocode"   % "junit-interface" % "0.11" % "test"),
 
     testOptions += Tests.Argument(
