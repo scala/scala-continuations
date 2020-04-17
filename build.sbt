@@ -1,7 +1,7 @@
 import Keys.{ `package` => packageTask }
 
 lazy val commonSettings = ScalaModulePlugin.scalaModuleSettings ++
-  ScalaModulePlugin.scalaModuleSettingsJVM ++
+  ScalaModulePlugin.scalaModuleOsgiSettings ++
   Seq(
     scalaModuleRepoName := "scala-continuations",
     organization := "org.scala-lang.plugins",
